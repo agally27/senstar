@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1786765464411,
+      "tag": "0000_create_organisations",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1786765465411,
+      "tag": "0001_enable_rls_organisations",
+      "breakpoints": true
+    }
+  ]
+}

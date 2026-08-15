@@ -1,0 +1,26 @@
+{
+  "name": "@senstar/web",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "echo 'no web tests yet (foundation phase)' && exit 0"
+  },
+  "dependencies": {
+    "@senstar/config": "workspace:*",
+    "@senstar/db": "workspace:*",
+    "@senstar/domain-identity": "workspace:*",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "typescript": "catalog:"
+  }
+}

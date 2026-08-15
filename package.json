@@ -1,0 +1,26 @@
+{
+  "name": "senstar",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Adaptive learning platform for children with additional needs (working name — see DECISIONS.md D7)",
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@11.21.0",
+  "scripts": {
+    "typecheck": "pnpm -r typecheck",
+    "lint": "eslint .",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "test": "pnpm -r test",
+    "build": "pnpm --filter @senstar/web build",
+    "db:generate": "pnpm --filter @senstar/db db:generate",
+    "db:migrate": "pnpm --filter @senstar/db db:migrate"
+  },
+  "devDependencies": {
+    "eslint": "^10.8.1",
+    "typescript-eslint": "^8.67.0",
+    "prettier": "^3.9.0",
+    "typescript": "^5.9.0"
+  }
+}
