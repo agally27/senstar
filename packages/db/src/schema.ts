@@ -23,3 +23,6 @@ export const organisations = pgTable('organisations', {
   name: text('name').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 });
+
+/** Authentication tables (ADR-0005) — re-exported so migrations and the adapter share one schema. */
+export * from './auth-schema';

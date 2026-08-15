@@ -28,7 +28,8 @@ export default tseslint.config(
     },
   },
   {
-    files: ['packages/db/**'],
+    // Each gateway package is exempt from its own boundary rule.
+    files: ['packages/db/**', 'packages/jobs/**', 'packages/observability/**', 'packages/auth/**'],
     rules: { 'no-restricted-imports': 'off' },
   },
 );

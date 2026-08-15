@@ -66,4 +66,52 @@ describe('database foundation', () => {
     );
     expect(rls.rows[0]?.relrowsecurity).toBe(true);
   });
+
+  it('creates the authentication tables in our own database (ADR-0005)', async () => {
+    const tables = await handle.pool.query(
+      `select table_name from information_schema.tables where table_schema = 'public'`,
+    );
+    const names = tables.rows.map((r) => r.table_name);
+    expect(names).toEqual(
+      expect.arrayContaining(['auth_user', 'auth_session', 'auth_account', 'auth_verification']),
+    );
+  });
+
+  it('has row-level security enabled on every identity table', async () => {
+    const rls = await handle.pool.query(
+      `select relname, relrowsecurity from pg_class
+       where relname in ('auth_user','auth_session','auth_account','auth_verification')`,
+    );
+    expect(rls.rows).toHaveLength(4);
+    for (const row of rls.rows) {
+      expect(row.relrowsecurity, `RLS missing on ${row.relname}`).toBe(true);
+    }
+  });
+
+  it('enforces one account per email address', async () => {
+    await handle.pool.query(
+      `insert into auth_user (id, name, email, email_verified)
+       values ('u1', 'Test Guardian', 'guardian@example.com', false)`,
+    );
+    await expect(
+      handle.pool.query(
+        `insert into auth_user (id, name, email, email_verified)
+         values ('u2', 'Someone Else', 'guardian@example.com', false)`,
+      ),
+    ).rejects.toThrow();
+  });
+
+  it('cascades session deletion when an account is erased (UK GDPR erasure path)', async () => {
+    await handle.pool.query(
+      `insert into auth_user (id, name, email, email_verified)
+       values ('u3', 'Erasable Guardian', 'erase@example.com', true)`,
+    );
+    await handle.pool.query(
+      `insert into auth_session (id, user_id, token, expires_at)
+       values ('s1', 'u3', 'tok-1', now() + interval '1 day')`,
+    );
+    await handle.pool.query(`delete from auth_user where id = 'u3'`);
+    const sessions = await handle.pool.query(`select id from auth_session where user_id = 'u3'`);
+    expect(sessions.rows).toHaveLength(0);
+  });
 });

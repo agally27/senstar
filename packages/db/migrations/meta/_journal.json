@@ -15,6 +15,20 @@
       "when": 1786765465411,
       "tag": "0001_enable_rls_organisations",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786774737748,
+      "tag": "0002_create_auth_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1786774738748,
+      "tag": "0003_enable_rls_auth_tables",
+      "breakpoints": true
     }
   ]
 }
