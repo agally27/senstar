@@ -39,7 +39,7 @@ Every capability claim in any document carries exactly one state: **Planned → 
 
 ## 6. AI-assisted development rules (for Claude/tooling sessions)
 
-Read `CLAUDE.md`, `DECISIONS.md`, and any doc being touched before working. State assumptions when working unattended; keep them reversible. Distinguish cited-authoritative / established-practice / proposal in analysis. Never generate migrations, authz changes, or safeguarding-relevant code without tests in the same change. End sessions with durable state pushed (repo; Claude project while D6 is open).
+Read `CLAUDE.md`, `DECISIONS.md`, and any doc being touched before working. State assumptions when working unattended; keep them reversible. Distinguish cited-authoritative / established-practice / proposal in analysis. Never generate migrations, authz changes, or safeguarding-relevant code without tests in the same change. End sessions with durable state pushed to the repo, and founder decisions mirrored into the Claude project.
 
 ## 7. Reality audits
 

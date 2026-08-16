@@ -44,7 +44,7 @@ The child is always the _beneficiary_; the horizons describe who operates the pl
 5. **Accessibility is the product, not a setting.** If a child cannot access an experience, that experience is broken, not "unsupported".
 6. **Calm by design.** No dark patterns, no streak pressure, no shame mechanics, no engagement-maximising tricks. Progress celebration is gentle and learner-appropriate. A child having a bad day must never be made to feel worse by the product.
 7. **The adult is a partner, not a spectator.** Parents and teachers contribute observations that genuinely feed the learner model; the product explains its reasoning to them and accepts correction.
-8. **Safeguarding outranks features.** Where a feature and children's safety or privacy conflict, safety wins without discussion. (See SAFEGUARDING.md and SECURITY_AND_PRIVACY.md when written.)
+8. **Safeguarding outranks features.** Where a feature and children's safety or privacy conflict, safety wins without discussion. (See SAFEGUARDING.md and SECURITY_AND_PRIVACY.md.)
 
 ## 5. Scope discipline
 

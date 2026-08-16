@@ -9,7 +9,7 @@
 
 **Modular monolith with enforced internal boundaries.** One deployable application; domain modules with explicit public contracts; no module reaches into another's internals or tables. The boundaries are the future seams for extraction — microservices are a possible future, never a starting point.
 
-**The eight boundaries** (full detail in DOMAIN_MODEL.md and MULTI_TENANCY.md when written):
+**The eight boundaries** (full detail in DOMAIN_MODEL.md and MULTI_TENANCY.md):
 
 1. **Identity, Tenancy & Access** — accounts, organisations (family and school as tenant shapes), memberships, guardianship, roles, permissions, consent records.
 2. **Curriculum** — versioned frameworks, subjects, key stages, programmes of study, objectives, skills, prerequisites. Read-mostly; human-curated; **no AI process may write here**.
@@ -69,7 +69,7 @@ Constitutional minimums (full treatment in SECURITY_AND_PRIVACY.md and SAFEGUARD
 
 ## 7. Approved infrastructure and its guardrails
 
-Per D4 (test phase; formal ADRs to follow in Phase 3): GitHub for source and CI; Vercel (London functions) for hosting; Neon Postgres (London, created in-region from day one); TypeScript/Next.js under the §2 structure. Guardrails that keep these reversible: no proprietary platform primitives (KV/Blob/Cron/etc.) without a wrapper interface; background jobs designed as an independent concern; domain packages must build and test with no framework installed.
+Per D4, now recorded as accepted ADRs 0002–0004 (`docs/adr/`): GitHub for source and CI; Vercel (London functions) for hosting; Neon Postgres (London, created in-region from day one); TypeScript/Next.js under the §2 structure. Guardrails that keep these reversible: no proprietary platform primitives (KV/Blob/Cron/etc.) without a wrapper interface; background jobs designed as an independent concern; domain packages must build and test with no framework installed.
 
 ## 8. Forbidden practices
 
