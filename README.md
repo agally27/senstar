@@ -11,6 +11,9 @@ apps/web                   Next.js delivery layer — NO business logic here
 packages/config            typed, fail-fast env config (ADR-0008)
 packages/db                Drizzle schema, migrations, client (ADR-0004)
 packages/domain-identity   branded IDs, roles, authorisation decision point
+packages/auth              Better Auth setup, actor context (ADR-0005)
+packages/jobs              background job queue abstraction (ADR-0006)
+packages/observability     structured logging and redaction (ADR-0007)
 docs/                      constitutions, design docs, ADRs
 ```
 

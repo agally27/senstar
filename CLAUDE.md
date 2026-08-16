@@ -27,7 +27,7 @@ Product Constitution → Educational Constitution → Technical Constitution →
 
 Lower levels never silently contradict higher ones. To change an architectural decision: write an ADR (existing decision, proposed change, reason, benefits, risks, affected modules, migration requirements) in `docs/adr/` and get founder approval. Founder decisions live in `DECISIONS.md`; open items are marked DECISION REQUIRED there — never resolve one by implementation. In your own output, distinguish cited authoritative sources, established practice, and your proposals.
 
-## Development rules (summary — see docs/DEVELOPMENT_RULES.md when written)
+## Development rules (summary — full text in docs/DEVELOPMENT_RULES.md)
 
 Strict TypeScript; domain logic in framework-agnostic packages, never in UI components or route handlers; migration-based schema changes only; provenance and tenancy as schema, not convention; tested business and authorisation logic (allow _and_ deny cases); dependencies need justification; no duplicate abstractions; observable services. Optimise for "remains correct as the platform becomes large", not "working quickly".
 
@@ -36,8 +36,8 @@ Strict TypeScript; domain logic in framework-agnostic packages, never in UI comp
 - `docs/PRODUCT_CONSTITUTION.md`, `docs/EDUCATIONAL_CONSTITUTION.md`, `docs/TECHNICAL_CONSTITUTION.md` — ratified principles (read before substantive work).
 - `DECISIONS.md` — decision register (check before assuming anything is settled).
 - `docs/adr/` — architecture decision records.
-- Until the git repository exists (D6 open), the canonical copies are in the attached Claude project; keep it updated at session end so future sessions inherit state.
+- The git repository (`agally27/Senstar`, D6 closed) is canonical for code and for the documents held in it. The attached Claude project is canonical for founder decisions and carries session-to-session context. Keep the two in step: anything decided in the project that constrains the code lands in the repo in the same session, and anything the repo proves about reality is reflected back.
 
 ## Session discipline
 
-Start by reading `DECISIONS.md` and any document you are about to touch. End by writing durable state back (repo once it exists; Claude project meanwhile). Ask the founder via explicit questions when a decision is theirs; when working unattended, state assumptions and keep them reversible. Do not begin feature implementation while the foundation phases (see `docs/foundation/00-FOUNDATION_ASSESSMENT.md`, section H) remain incomplete.
+Start by reading `DECISIONS.md` and any document you are about to touch. End by writing durable state back — pushed to the repo, with founder decisions mirrored into the Claude project. Ask the founder via explicit questions when a decision is theirs; when working unattended, state assumptions and keep them reversible. Do not begin feature implementation while the foundation stages (see `docs/foundation/01-FOUNDATION_PLAN.md`, Stages A–E) remain incomplete.
