@@ -9,14 +9,14 @@
 
 ## A. What was verified green
 
-| Step | Result |
-| --- | --- |
-| `pnpm install --frozen-lockfile` | clean; lockfile passes supply-chain policies |
-| `pnpm typecheck` | 7 of 8 workspace projects, all pass |
-| `pnpm lint` | clean |
-| `pnpm test` | 46 tests pass (config 7, domain-identity 8, observability 10, jobs 5, db 9, auth 7); `apps/web` has no tests, deliberately |
-| `pnpm build` | Next 16.3.1 production build succeeds; routes `/`, `/_not-found`, `/api/health` |
-| Migrations | 4 migrations apply against Postgres 16; `packages/db` integration tests exercise them |
+| Step                             | Result                                                                                                                     |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm install --frozen-lockfile` | clean; lockfile passes supply-chain policies                                                                               |
+| `pnpm typecheck`                 | 7 of 8 workspace projects, all pass                                                                                        |
+| `pnpm lint`                      | clean                                                                                                                      |
+| `pnpm test`                      | 46 tests pass (config 7, domain-identity 8, observability 10, jobs 5, db 9, auth 7); `apps/web` has no tests, deliberately |
+| `pnpm build`                     | Next 16.3.1 production build succeeds; routes `/`, `/_not-found`, `/api/health`                                            |
+| Migrations                       | 4 migrations apply against Postgres 16; `packages/db` integration tests exercise them                                      |
 
 The handover's expected numbers (7 packages, 46 tests) are confirmed accurate.
 
@@ -50,15 +50,15 @@ This contradicts the handover's "lint/format clean". Format was never clean.
 
 ### MEDIUM — stale forward references (DEVELOPMENT_RULES §1 defects). All FIXED.
 
-| # | File | Was | Now |
-| --- | --- | --- | --- |
-| M1 | `CLAUDE.md` §Development rules | "see docs/DEVELOPMENT_RULES.md when written" | file exists — wording corrected |
-| M2 | `CLAUDE.md` §Where things live | "Until the git repository exists (D6 open), the canonical copies are in the attached Claude project" | repo canonical for code and docs-in-repo; Claude project canonical for founder decisions; keep in step |
-| M3 | `CLAUDE.md` §Session discipline | "repo once it exists; Claude project meanwhile"; gate pointed at missing `00-FOUNDATION_ASSESSMENT.md` §H | pushed to repo, decisions mirrored; gate repointed at `01-FOUNDATION_PLAN.md` Stages A–E |
-| M4 | `docs/TECHNICAL_CONSTITUTION.md` §1 | "DOMAIN_MODEL.md and MULTI_TENANCY.md when written" | both exist — wording corrected |
-| M5 | `docs/TECHNICAL_CONSTITUTION.md` §7 | "formal ADRs to follow in Phase 3" | "now recorded as accepted ADRs 0002–0004" |
-| M6 | `docs/DEVELOPMENT_RULES.md` §6 | "Claude project while D6 is open" | D6 closed — wording corrected |
-| M7 | `docs/PRODUCT_CONSTITUTION.md` §4.8 | "See SAFEGUARDING.md and SECURITY_AND_PRIVACY.md when written" | both exist — wording corrected |
+| #   | File                                | Was                                                                                                       | Now                                                                                                    |
+| --- | ----------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| M1  | `CLAUDE.md` §Development rules      | "see docs/DEVELOPMENT_RULES.md when written"                                                              | file exists — wording corrected                                                                        |
+| M2  | `CLAUDE.md` §Where things live      | "Until the git repository exists (D6 open), the canonical copies are in the attached Claude project"      | repo canonical for code and docs-in-repo; Claude project canonical for founder decisions; keep in step |
+| M3  | `CLAUDE.md` §Session discipline     | "repo once it exists; Claude project meanwhile"; gate pointed at missing `00-FOUNDATION_ASSESSMENT.md` §H | pushed to repo, decisions mirrored; gate repointed at `01-FOUNDATION_PLAN.md` Stages A–E               |
+| M4  | `docs/TECHNICAL_CONSTITUTION.md` §1 | "DOMAIN_MODEL.md and MULTI_TENANCY.md when written"                                                       | both exist — wording corrected                                                                         |
+| M5  | `docs/TECHNICAL_CONSTITUTION.md` §7 | "formal ADRs to follow in Phase 3"                                                                        | "now recorded as accepted ADRs 0002–0004"                                                              |
+| M6  | `docs/DEVELOPMENT_RULES.md` §6      | "Claude project while D6 is open"                                                                         | D6 closed — wording corrected                                                                          |
+| M7  | `docs/PRODUCT_CONSTITUTION.md` §4.8 | "See SAFEGUARDING.md and SECURITY_AND_PRIVACY.md when written"                                            | both exist — wording corrected                                                                         |
 
 ### LOW
 
