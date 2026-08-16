@@ -5,6 +5,7 @@
  *
  * Requires a local Postgres with the senstar_test database (CI provides one).
  */
+import pg from 'pg';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
   checkDatabaseConnection,
@@ -13,27 +14,62 @@ import {
   type DatabaseHandle,
 } from '../src/index';
 
+const EXPLICIT_URL = process.env['TEST_DATABASE_URL'];
 const TEST_URL =
-  process.env['TEST_DATABASE_URL'] ??
-  'postgresql://senstar:senstar_local_dev@localhost:5432/senstar_test';
+  EXPLICIT_URL ?? 'postgresql://senstar:senstar_local_dev@localhost:5432/senstar_test';
+
+async function isReachable(url: string): Promise<boolean> {
+  const probe = new pg.Pool({ connectionString: url, connectionTimeoutMillis: 2000, max: 1 });
+  try {
+    await probe.query('select 1');
+    return true;
+  } catch {
+    return false;
+  } finally {
+    await probe.end().catch(() => undefined);
+  }
+}
+
+const reachable = await isReachable(TEST_URL);
+
+/**
+ * Skip locally, never in CI.
+ *
+ * CI sets TEST_DATABASE_URL and these tests MUST run there — an unreachable
+ * database in CI is a red build, never a silent pass (DEVELOPMENT_RULES §2: CI
+ * is the source of truth for merge readiness). So the suite is skipped only
+ * when no explicit URL was given and the local default is not listening, which
+ * is the developer-without-Postgres case. With TEST_DATABASE_URL set the suite
+ * always runs, and fails loudly if the database is not there.
+ */
+const skipSuite = !reachable && EXPLICIT_URL === undefined;
+
+if (skipSuite) {
+  console.warn(
+    `[@senstar/db] Skipping integration tests: no Postgres at ${TEST_URL}.\n` +
+      `             Start PostgreSQL 16 (see README) or set TEST_DATABASE_URL to run them.`,
+  );
+}
 
 let handle: DatabaseHandle;
 
-beforeAll(async () => {
-  handle = createDatabase(TEST_URL);
-  // start from empty every run: migrations must build the world from scratch
-  // (including drizzle's own migration-tracking schema — otherwise a previous
-  // run's journal makes the migrator skip everything against an empty public schema)
-  await handle.pool.query(
-    'drop schema public cascade; create schema public; drop schema if exists drizzle cascade;',
-  );
-});
+// Hooks live inside the suite so that skipping it also skips the destructive
+// setup below — at file level they would run even with every test skipped.
+describe.skipIf(skipSuite)('database foundation', () => {
+  beforeAll(async () => {
+    handle = createDatabase(TEST_URL);
+    // start from empty every run: migrations must build the world from scratch
+    // (including drizzle's own migration-tracking schema — otherwise a previous
+    // run's journal makes the migrator skip everything against an empty public schema)
+    await handle.pool.query(
+      'drop schema public cascade; create schema public; drop schema if exists drizzle cascade;',
+    );
+  });
 
-afterAll(async () => {
-  await handle.close();
-});
+  afterAll(async () => {
+    await handle.close();
+  });
 
-describe('database foundation', () => {
   it('connects', async () => {
     expect(await checkDatabaseConnection(handle)).toBe(true);
   });

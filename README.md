@@ -30,6 +30,8 @@ pnpm typecheck && pnpm lint && pnpm test
 pnpm --filter @senstar/web dev       # http://localhost:3000 (/api/health)
 ```
 
+`packages/db`'s integration tests need a reachable Postgres. Without one they are skipped so `pnpm test` still passes; set `TEST_DATABASE_URL` to point them elsewhere. CI always sets it, so there an unreachable database is a failure, never a skip.
+
 ## Rules that bite
 
 Synthetic data only outside production — no real child data anywhere before the D10 gate (`DECISIONS.md`). Schema changes by migration only. Business logic never in UI/routes. CI green is the definition of mergeable. Documentation states: Planned / Designed / Implemented / Tested / Production-ready — claims carry their state.

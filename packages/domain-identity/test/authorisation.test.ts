@@ -6,6 +6,7 @@ import {
   authorise,
   type ActorContext,
   type LearnerResource,
+  type Role,
 } from '../src/index';
 
 const orgA = OrganisationId('11111111-1111-4111-8111-111111111111');
@@ -85,6 +86,21 @@ describe('authorise — deny cases (every permission ships with denies)', () => 
         organisationId: orgA,
       }).allowed,
     ).toBe(false);
+  });
+
+  it('denies — never throws — when a role outside the catalogue arrives from the database', () => {
+    // Roles are read from persistence, so the compile-time union is not a
+    // runtime guarantee: a stale row or a role dropped by a later migration
+    // produces an unknown string here. It must deny, not crash the request.
+    const staleRole: ActorContext = {
+      ...parentOfChild,
+      roles: ['deputy_senco_2019' as Role],
+    };
+    expect(() => authorise(staleRole, 'learner.profile.read', childResource)).not.toThrow();
+    expect(authorise(staleRole, 'learner.profile.read', childResource)).toEqual({
+      allowed: false,
+      reason: 'permission_not_granted',
+    });
   });
 });
 

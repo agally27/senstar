@@ -91,8 +91,15 @@ export type Resource = LearnerResource | OrganisationResource;
 export type Decision =
   { readonly allowed: true } | { readonly allowed: false; readonly reason: string };
 
+/**
+ * Roles reach this function from persistence, where TypeScript's guarantee does
+ * not hold: a stale row, a role removed by a later migration, or a typo yields a
+ * string outside the catalogue. Falling back to an empty permission set makes
+ * that case a *denial* rather than a TypeError — fail closed by construction,
+ * not by crash.
+ */
 function roleGrants(roles: readonly Role[], permission: Permission): boolean {
-  return roles.some((role) => ROLE_PERMISSIONS[role].includes(permission));
+  return roles.some((role) => (ROLE_PERMISSIONS[role] ?? []).includes(permission));
 }
 
 /**
