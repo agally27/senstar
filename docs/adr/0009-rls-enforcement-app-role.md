@@ -1,6 +1,6 @@
 # ADR-0009: Make row-level security actually bind — a non-owning application role and FORCE RLS
 
-**Status:** Proposed (awaiting founder)
+**Status:** Accepted (founder, 2026-08-17)
 **Date:** 2026-08-16
 **Decision register ref:** New D-number required. `DECISIONS.md` is absent from the repository (REALITY_AUDIT_2026-08-15 §C1), so this ADR cannot cite or close one.
 
@@ -108,6 +108,13 @@ Non-negotiable for the application role: **not** superuser, **not** `BYPASSRLS`,
 
 ## Outcome
 
-**Proposed — awaiting founder decision.** Not implemented. Per CLAUDE.md, architectural decisions require founder approval before implementation, and this one changes the connection model and the environment contract.
+**Accepted by founder, 2026-08-17.** Not yet implemented — acceptance authorises the change; the work follows.
 
-Recommended sequencing if accepted: steps 1 and 2 (roles, `FORCE`, CI assertions) can land immediately and independently — they close the demonstrated hole without needing the policy design. Step 3 (policies and the `SET LOCAL` primitive) belongs with the first tenant-scoped learner table, when there is a real tenant key to key policies on.
+Sequencing:
+
+- **Steps 1 and 2** (migration/application role split, `FORCE ROW LEVEL SECURITY`, CI assertions that the application role is not owner, not superuser, and lacks `BYPASSRLS`) land first and independently. They close the demonstrated hole without needing the policy design.
+- **Step 3** (tenant policies and the `SET LOCAL` primitive in `packages/db`) belongs with the first tenant-scoped learner table, when there is a real tenant key to key policies on.
+
+**Blocking check before step 1:** whether Neon's default project role is a superuser or holds `BYPASSRLS`. If it does, the application role must be a new Neon role rather than the default. Unverified at time of acceptance.
+
+A future ADR supersedes this one if the role model changes; it is not amended in place.
