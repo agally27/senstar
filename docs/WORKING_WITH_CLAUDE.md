@@ -63,15 +63,19 @@ A Claude session that cannot satisfy one of these should say so in its reply and
 
 ## 5. Setup state
 
-| Item                                        | State                                                                                                                 |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| Claude GitHub App installed on `agally27`   | Done — read/write, all repositories                                                                                   |
-| `.github/workflows/claude.yml`              | In this repository                                                                                                    |
-| `CLAUDE_CODE_OAUTH_TOKEN` repository secret | **Not set** — run `claude setup-token` locally, add it under Settings → Secrets and variables → Actions               |
-| Branch protection on `main`                 | **Not set** — require a PR, require the CI check, no force-push                                                       |
-| `DECISIONS.md` in the repository            | **Not present** — currently lives only in the Claude project, so rule 1 above cannot be satisfied from the repo alone |
+| Item                                        | State                                                                                                                                                                  |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude GitHub App installed on `agally27`   | Done — read/write, all repositories                                                                                                                                    |
+| `.github/workflows/claude.yml`              | In this repository                                                                                                                                                     |
+| `CLAUDE_CODE_OAUTH_TOKEN` repository secret | **Not set** — run `claude setup-token` locally, add it under Settings → Secrets and variables → Actions                                                                |
+| Branch protection on `main`                 | **Blocked** — branch protection _and_ rulesets both require GitHub Pro on a private repository (confirmed HTTP 403). Until then `main` is protected by convention only |
+| `DECISIONS.md` in the repository            | **Not present** — currently lives only in the Claude project, so rule 1 above cannot be satisfied from the repo alone                                                  |
 
-The last two matter most. Without branch protection, an autonomous session can push straight to `main`. Without `DECISIONS.md`, every session is told to read a file that does not exist, and will proceed without knowing which decisions are still open — which is precisely the failure mode the decision register exists to prevent.
+The last two matter most, and neither is fully closed.
+
+Branch protection cannot be enabled on this repository's current plan — GitHub gates both branch protection and rulesets behind Pro for private repositories. So nothing mechanically stops an autonomous session pushing to `main`; rule 3 in §3 ("branch, never push to `main`") is enforced by convention alone. Closing it properly means GitHub Pro, since making the repository public is not an option for this project.
+
+Without `DECISIONS.md`, every session is told to read a file that does not exist and proceeds without knowing which decisions are open — precisely the failure mode the register exists to prevent.
 
 ## 6. Cost
 
