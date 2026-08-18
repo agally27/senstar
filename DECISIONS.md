@@ -2,7 +2,8 @@
 
 **Status:** Draft for founder verification. **This is not the decision register.**
 **Prepared:** 2026-08-16, by a Claude session with no access to the Claude project.
-**Baseline:** `agally27/Senstar`, branch `docs/reality-alignment`.
+**Baseline:** `agally27/senstar`, branch `main` (originally prepared against `docs/reality-alignment`, since merged and deleted).
+**Corrected:** 2026-08-18 — see §6.
 
 ## Read this before using the file
 
@@ -44,23 +45,23 @@ superseded decision keeps its number.
 
 ## 2. Register
 
-| #       | Subject                                | Repo says                                                                                                                                | Status (verify)    | Source                                                                        |
-| ------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----------------------------------------------------------------------------- |
-| **D1**  | Content provenance categories          | Every piece of educational information belongs to exactly one provenance category, carried as first-class data, visible to adults        | DECIDED            | `EDUCATIONAL_CONSTITUTION.md:30`                                              |
-| **D2**  | Curriculum position decoupled from age | A learner's curriculum position is fully decoupled from age and school year, from day one; dual-axis stage vs presentation register      | DECIDED            | `EDUCATIONAL_CONSTITUTION.md:21`, `SAFEGUARDING.md:33`                        |
-| **D3**  | Horizon 1 market                       | Parents and home educators are the wedge; the parent is customer and account holder                                                      | DECIDED            | `PRODUCT_CONSTITUTION.md:30`                                                  |
-| **D4**  | Infrastructure and residency           | Neon Postgres `aws-eu-west-2`; Vercel functions `lhr1`; synthetic data only outside production                                           | DECIDED 2026-08-14 | `ADR-0003:5`, `ADR-0004:5`, `TECHNICAL_CONSTITUTION.md:56`                    |
-| **D5**  | Parent-mediated v1                     | Adult accounts only; no child logins in v1; the parent operates the session. Flagged for revisit when children interact directly         | DECIDED            | `PRODUCT_CONSTITUTION.md:30`, `DOMAIN_MODEL.md:23`, `MULTI_TENANCY.md:53`     |
-| **D6**  | Source repository home                 | Private GitHub repo as single source of truth; Actions for CI; protected `main`                                                          | CLOSED BY ADR-0002 | `ADR-0002:5`, `CLAUDE.md:39`                                                  |
-| **D7**  | Product name                           | "Senstar" is provisional. Nothing in code, data or branding may treat it as final                                                        | DECISION REQUIRED  | `PRODUCT_CONSTITUTION.md:5`, `package.json:5`                                 |
-| **D8**  | Curriculum sign-off authority          | Who signs off platform-curated curriculum content. Blocks any `approved` curated objective; blocks Foundation Stage E                    | DECISION REQUIRED  | `DOMAIN_MODEL.md:90`, `01-FOUNDATION_PLAN.md:63,74`                           |
-| **D9**  | LLM provider and review posture        | Provider(s), processor terms, no-training clauses, and the initial human-review posture (recommended: all child-facing content reviewed) | DECISION REQUIRED  | `AI_ARCHITECTURE.md:55`, `TECHNICAL_CONSTITUTION.md:48`                       |
-| **D10** | ICO registration + DPIA                | **Hard gate.** No real child data before ICO registration and DPIA are in place                                                          | DECISION REQUIRED  | `TECHNICAL_CONSTITUTION.md:61`, `SECURITY_AND_PRIVACY.md:52`                  |
-| **D11** | UNKNOWN                                | **Not referenced anywhere in the repository.** Either it exists only in the real register, or the number was never used                  | UNKNOWN            | —                                                                             |
-| **D12** | Database access layer                  | Drizzle as the access layer over Neon Postgres                                                                                           | CLOSED BY ADR-0004 | `ADR-0004:5,42`                                                               |
-| **D13** | Authentication provider                | Better Auth, self-hosted; identity data in our own database                                                                              | CLOSED BY ADR-0005 | `ADR-0005:5,44`                                                               |
-| **D14** | Status of generation drafts            | Whether AI generation drafts count as personal data when derived from a learner model                                                    | DECISION REQUIRED  | `AI_ARCHITECTURE.md:55`                                                       |
-| **D15** | Transactional email provider           | Blocks any sign-up flow — `createAuth` requires an email transport. Brief prepared; two candidates survive the residency test            | DECISION REQUIRED  | `docs/foundation/D15_EMAIL_PROVIDER_BRIEF.md`, `packages/auth/src/auth.ts:22` |
+| #       | Subject                                | Repo says                                                                                                                                                            | Status (verify)    | Source                                                                        |
+| ------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----------------------------------------------------------------------------- |
+| **D1**  | Content provenance categories          | Every piece of educational information belongs to exactly one provenance category, carried as first-class data, visible to adults                                    | DECIDED            | `EDUCATIONAL_CONSTITUTION.md:30`                                              |
+| **D2**  | Curriculum position decoupled from age | A learner's curriculum position is fully decoupled from age and school year, from day one; dual-axis stage vs presentation register                                  | DECIDED            | `EDUCATIONAL_CONSTITUTION.md:21`, `SAFEGUARDING.md:33`                        |
+| **D3**  | Horizon 1 market                       | Parents and home educators are the wedge; the parent is customer and account holder                                                                                  | DECIDED            | `PRODUCT_CONSTITUTION.md:30`                                                  |
+| **D4**  | Infrastructure and residency           | Neon Postgres `aws-eu-west-2`; Vercel functions `lhr1`; synthetic data only outside production                                                                       | DECIDED 2026-08-14 | `ADR-0003:5`, `ADR-0004:5`, `TECHNICAL_CONSTITUTION.md:56`                    |
+| **D5**  | Parent-mediated v1                     | Adult accounts only; no child logins in v1; the parent operates the session. Flagged for revisit when children interact directly                                     | DECIDED            | `PRODUCT_CONSTITUTION.md:30`, `DOMAIN_MODEL.md:23`, `MULTI_TENANCY.md:53`     |
+| **D6**  | Source repository home                 | GitHub repo as single source of truth; Actions for CI; protected `main`. **ADR-0002 decided a _private_ repo; it is public since 2026-08-18 — unreconciled, see §6** | CLOSED BY ADR-0002 | `ADR-0002:5`, `CLAUDE.md:39`                                                  |
+| **D7**  | Product name                           | "Senstar" is provisional. Nothing in code, data or branding may treat it as final                                                                                    | DECISION REQUIRED  | `PRODUCT_CONSTITUTION.md:5`, `package.json:5`                                 |
+| **D8**  | Curriculum sign-off authority          | Who signs off platform-curated curriculum content. Blocks any `approved` curated objective; blocks Foundation Stage E                                                | DECISION REQUIRED  | `DOMAIN_MODEL.md:90`, `01-FOUNDATION_PLAN.md:63,74`                           |
+| **D9**  | LLM provider and review posture        | Provider(s), processor terms, no-training clauses, and the initial human-review posture (recommended: all child-facing content reviewed)                             | DECISION REQUIRED  | `AI_ARCHITECTURE.md:55`, `TECHNICAL_CONSTITUTION.md:48`                       |
+| **D10** | ICO registration + DPIA                | **Hard gate.** No real child data before ICO registration and DPIA are in place                                                                                      | DECISION REQUIRED  | `TECHNICAL_CONSTITUTION.md:61`, `SECURITY_AND_PRIVACY.md:52`                  |
+| **D11** | UNKNOWN                                | **Not referenced anywhere in the repository.** Either it exists only in the real register, or the number was never used                                              | UNKNOWN            | —                                                                             |
+| **D12** | Database access layer                  | Drizzle as the access layer over Neon Postgres                                                                                                                       | CLOSED BY ADR-0004 | `ADR-0004:5,42`                                                               |
+| **D13** | Authentication provider                | Better Auth, self-hosted; identity data in our own database                                                                                                          | CLOSED BY ADR-0005 | `ADR-0005:5,44`                                                               |
+| **D14** | Status of generation drafts            | Whether AI generation drafts count as personal data when derived from a learner model                                                                                | DECISION REQUIRED  | `AI_ARCHITECTURE.md:55`                                                       |
+| **D15** | Transactional email provider           | Blocks any sign-up flow — `createAuth` requires an email transport. Brief prepared; two candidates survive the residency test                                        | DECISION REQUIRED  | `docs/foundation/D15_EMAIL_PROVIDER_BRIEF.md`, `packages/auth/src/auth.ts:22` |
 
 ---
 
@@ -91,7 +92,7 @@ continues on synthetic data regardless; this gates production only.
 
 The only one of the four with a prepared brief. AWS SES (`eu-west-2`) and Mailgun EU
 survive the UK/EU residency test in `TECHNICAL_CONSTITUTION.md` §5; Resend and Postmark
-were eliminated on the vendors' own documentation. On decision: ADR-0009, then
+were eliminated on the vendors' own documentation. On decision: a new ADR at the next free number (0009 is the accepted RLS decision), then
 `packages/email` as a gateway, then the Better Auth route handler can be mounted.
 
 ---
@@ -118,3 +119,37 @@ were eliminated on the vendors' own documentation. On decision: ADR-0009, then
   side-effect of implementation.
 - When a Claude session finds it needs a decision that is not in this file, the correct
   action is to add a row with status `DECISION REQUIRED`, state what is blocked, and stop.
+
+---
+
+## 6. Corrections log
+
+Changes made to this file after it was prepared, each recording reality rather than
+deciding anything. Listed so the founder can check them against the real register.
+
+| Date       | Correction                                                                                                                                               |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-08-18 | Header baseline updated: `docs/reality-alignment` was merged and deleted; repository name is lowercase `agally27/senstar`.                               |
+| 2026-08-18 | D15: the forward reference to ADR-0009 was reassigned. **ADR-0009 is the accepted RLS decision** (2026-08-17); the email ADR takes the next free number. |
+| 2026-08-18 | D6: repository is public as of 2026-08-18. **ADR-0002 decided a _private_ repository** — see below.                                                      |
+
+### Unreconciled: repository visibility contradicts ADR-0002
+
+**DECISION REQUIRED.** ADR-0002 (accepted 2026-08-14) decides:
+
+> Private GitHub repository (`senstar`, provisional name) as the single source of truth
+
+The repository was made public on 2026-08-18, to obtain branch protection — GitHub gates
+branch protection and rulesets behind a paid plan for private repositories, and protecting
+`main` was judged the more important control.
+
+That is a change to an accepted architectural decision, which `CLAUDE.md` requires be made
+by ADR with founder approval, not by action. It has not been. Either an ADR should record
+and ratify it (superseding ADR-0002 in part), or the repository should return to private
+and branch protection be obtained another way.
+
+Note what going public does **not** change: ADR-0002's child-data assessment holds, because
+no personal or child data may enter the repository in any case (DEVELOPMENT_RULES §4). What
+it does change is that the safeguarding and security design — `SAFEGUARDING.md`,
+`SECURITY_AND_PRIVACY.md`, `MULTI_TENANCY.md`, and ADR-0009's description of an unclosed RLS
+gap — are now publicly readable.
