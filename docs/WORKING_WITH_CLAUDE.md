@@ -63,15 +63,19 @@ A Claude session that cannot satisfy one of these should say so in its reply and
 
 ## 5. Setup state
 
-| Item                                        | State                                                                                                                 |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| Claude GitHub App installed on `agally27`   | Done — read/write, all repositories                                                                                   |
-| `.github/workflows/claude.yml`              | In this repository                                                                                                    |
-| `CLAUDE_CODE_OAUTH_TOKEN` repository secret | **Not set** — run `claude setup-token` locally, add it under Settings → Secrets and variables → Actions               |
-| Branch protection on `main`                 | **Not set** — require a PR, require the CI check, no force-push                                                       |
-| `DECISIONS.md` in the repository            | **Not present** — currently lives only in the Claude project, so rule 1 above cannot be satisfied from the repo alone |
+| Item                                        | State                                                                                                                                 |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude GitHub App installed on `agally27`   | Done — read/write, all repositories                                                                                                   |
+| `.github/workflows/claude.yml`              | In this repository                                                                                                                    |
+| `CLAUDE_CODE_OAUTH_TOKEN` repository secret | **Not set** — run `claude setup-token` locally, add it under Settings → Secrets and variables → Actions                               |
+| Branch protection on `main`                 | **Enabled** 2026-08-18 — PR required, `ci` must pass, branch up to date before merge, no force-push, no deletion, **admins included** |
+| `DECISIONS.md` in the repository            | **Not present** — currently lives only in the Claude project, so rule 1 above cannot be satisfied from the repo alone                 |
 
-The last two matter most. Without branch protection, an autonomous session can push straight to `main`. Without `DECISIONS.md`, every session is told to read a file that does not exist, and will proceed without knowing which decisions are still open — which is precisely the failure mode the decision register exists to prevent.
+Branch protection is now enforced. The repository was made public on 2026-08-18, which lifts the GitHub Pro gate on protected branches. Rule 3 in §3 ("branch, never push to `main`") is now a mechanism rather than a convention: `main` takes changes only through a pull request with `ci` green, and **admins are included**, so a session running under the founder's own token cannot bypass it either.
+
+`DECISIONS.md` remains the open item. Without it, every session is told to read a file that does not exist and proceeds without knowing which decisions are open — precisely the failure mode the register exists to prevent.
+
+**The repository is public.** Everything here — the constitutions, `SAFEGUARDING.md`, `SECURITY_AND_PRIVACY.md`, `MULTI_TENANCY.md`, and every ADR — is world-readable, including ADRs describing controls that are designed but not yet implemented. Two consequences worth holding: security gaps recorded in the open (ADR-0009 in particular) should be closed promptly rather than left standing, and anyone can comment `@claude` on an issue. The action only runs for users with **write access** and rejects bot actors, which is what prevents a stranger from driving it — do not weaken `allowed_bots` on a public repository.
 
 ## 6. Cost
 
