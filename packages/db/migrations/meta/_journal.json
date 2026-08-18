@@ -29,6 +29,13 @@
       "when": 1786774738748,
       "tag": "0003_enable_rls_auth_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1786774739748,
+      "tag": "0004_app_role_and_force_rls",
+      "breakpoints": true
     }
   ]
 }

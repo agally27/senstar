@@ -21,12 +21,29 @@ const serverEnvSchema = z.object({
     }),
   BETTER_AUTH_SECRET: z.string().min(16, 'BETTER_AUTH_SECRET must be at least 16 characters'),
   BETTER_AUTH_URL: z.string().url(),
+  /**
+   * Owner/migrator connection (ADR-0009). Optional, and deliberately so: the
+   * web app must start without it and must NEVER carry it in preview or
+   * production. Only the migration CLI and CI supply it.
+   */
+  MIGRATION_DATABASE_URL: z
+    .string()
+    .url()
+    .refine((v) => v.startsWith('postgresql://') || v.startsWith('postgres://'), {
+      message: 'MIGRATION_DATABASE_URL must be a Postgres connection string',
+    })
+    .optional(),
 });
 
 export interface ServerConfig {
   readonly appEnv: AppEnv;
-  /** Secret class — never log or serialise. */
+  /** Secret class — never log or serialise. Non-owning application role (ADR-0009). */
   readonly databaseUrl: string;
+  /**
+   * Secret class — never log or serialise. Owner/migrator role (ADR-0009);
+   * undefined everywhere except the migration CLI and CI.
+   */
+  readonly migrationDatabaseUrl: string | undefined;
   /** Secret class — never log or serialise. */
   readonly authSecret: string;
   readonly authUrl: string;
@@ -53,6 +70,7 @@ export function loadServerConfig(
   return {
     appEnv: e.APP_ENV,
     databaseUrl: e.DATABASE_URL,
+    migrationDatabaseUrl: e.MIGRATION_DATABASE_URL,
     authSecret: e.BETTER_AUTH_SECRET,
     authUrl: e.BETTER_AUTH_URL,
     isProduction: e.APP_ENV === 'production',

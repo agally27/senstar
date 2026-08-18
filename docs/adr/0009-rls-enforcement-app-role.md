@@ -104,7 +104,7 @@ Non-negotiable for the application role: **not** superuser, **not** `BYPASSRLS`,
 - `docs/MULTI_TENANCY.md` §3 — record that layer 3 requires a non-owning role and `FORCE`, so the requirement is not re-derived later.
 - `packages/db/test/` — the RLS enforcement tests.
 
-**Open question for implementation:** whether Neon's default project role is a superuser or holds `BYPASSRLS`. If it does, the application role must be a _new_ Neon role rather than the default one. **This has not been verified** — it needs checking against Neon's documentation before this ADR is implemented, and it may change step 1's provisioning detail.
+**Open question for implementation — RESOLVED 2026-08-18, see addendum below.**
 
 ## Outcome
 
@@ -118,3 +118,31 @@ Sequencing:
 **Blocking check before step 1:** whether Neon's default project role is a superuser or holds `BYPASSRLS`. If it does, the application role must be a new Neon role rather than the default. Unverified at time of acceptance.
 
 A future ADR supersedes this one if the role model changes; it is not amended in place.
+
+---
+
+## Addendum — 2026-08-18: the Neon open question, answered
+
+The ADR flagged one blocking check before implementation: whether Neon's default project role is a superuser or holds `BYPASSRLS`. In effect it does, and the answer changes step 1's provisioning detail.
+
+Per [Neon's role documentation](https://neon.com/docs/manage/roles):
+
+- `neon_superuser` carries **`BYPASSRLS`** — "This attribute is only included in neon_superuser roles in projects created after the August 15, 2023 release."
+- **Roles created via the Console, CLI, or API automatically receive `neon_superuser` membership** (CREATEDB, CREATEROLE, BYPASSRLS, REPLICATION).
+- **Roles created with SQL** from psql, pgAdmin or the Neon SQL Editor "are only granted the basic public schema privileges granted to newly created roles in a standalone Postgres installation".
+
+So the default project role bypasses RLS unconditionally — the superuser row in the table above, where `FORCE` made no difference.
+
+**Consequence for step 1: the application role must be created with SQL, never through the Neon Console, CLI or API.** That is the trap, and the intuitive path is what springs it — creating the app role in the Console silently grants it `BYPASSRLS`, and layer 3 is inert again while every migration, policy and document still reads as correct.
+
+Two implementation requirements follow, both now in place:
+
+1. Migration `0004_app_role_and_force_rls.sql` creates `senstar_app` in SQL, with `NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS` stated explicitly rather than relied on as defaults.
+2. `packages/db/test/rls.test.ts` asserts `rolsuper` and `rolbypassrls` are both false on that role — the check that catches this if the role is ever recreated through the UI. Verified by mutation: granting it `BYPASSRLS` fails both the attribute assertion and the behavioural one.
+
+No change to the decision; this closes the question it left open.
+
+## Implementation status
+
+- **Steps 1–2: implemented** 2026-08-18 — owner/application role split, `MIGRATION_DATABASE_URL`, `FORCE ROW LEVEL SECURITY` on all five existing tables, and the parts of step 4 that apply to them.
+- **Step 3 (tenant policies keyed on `SET LOCAL app.organisation_id`): not implemented**, as sequenced — it belongs with the first tenant-scoped learner table, when there is a real tenant key to key policies on. Until then the tables are fail-closed: the application role reads nothing at all. That is the safe state, and it forces step 3 before any feature can depend on them.
