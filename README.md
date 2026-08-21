@@ -25,10 +25,12 @@ Requires Node 22+, pnpm, PostgreSQL 16.
 pnpm install
 cp .env.example .env.local          # fill in values (see file comments)
 createdb senstar_dev                 # plus a senstar_test for integration tests
-pnpm db:migrate                      # apply migrations
+pnpm db:migrate                      # apply migrations (needs MIGRATION_DATABASE_URL)
 pnpm typecheck && pnpm lint && pnpm test
 pnpm --filter @senstar/web dev       # http://localhost:3000 (/api/health)
 ```
+
+Two database roles, not one (ADR-0009): `MIGRATION_DATABASE_URL` is the owner and runs migrations; `DATABASE_URL` is the non-owning `senstar_app` role the application connects as, created by migration `0004`. Set its password once per environment with `ALTER ROLE senstar_app WITH PASSWORD '...'` — migrations never carry credentials.
 
 `packages/db`'s integration tests need a reachable Postgres. Without one they are skipped so `pnpm test` still passes; set `TEST_DATABASE_URL` to point them elsewhere. CI always sets it, so there an unreachable database is a failure, never a skip.
 

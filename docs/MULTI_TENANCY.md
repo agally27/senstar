@@ -35,6 +35,14 @@ Every request resolves, before any domain logic runs, to an **ActorContext**: `(
 1. **Authorisation service (domain layer).** Every domain operation declares its required permission and resource; the service checks (ActorContext, permission, resource → allow/deny) server-side. UI hiding is presentation only.
 2. **Tenant-scoped data access.** Repositories require tenant scope as a construction parameter — there is no API to query without one. "Forgot the WHERE clause" must be unrepresentable, not discouraged.
 3. **Postgres row-level security.** Tenant key on every tenant-scoped table; RLS policies as defence-in-depth beneath the application. Layer 2 bugs hit a database wall.
+
+   Three conditions are required together, and any one missing makes this layer inert (ADR-0009):
+   - `ENABLE` **and** `FORCE ROW LEVEL SECURITY` on the table — `ENABLE` alone does not apply to the table owner.
+   - The application connects as a **non-owning** role that is not a superuser and does not hold `BYPASSRLS`. On Neon this role must be created **with SQL**: roles created through the Console, CLI or API are granted `neon_superuser`, which carries `BYPASSRLS`.
+   - Migrations run as a separate owner role (`MIGRATION_DATABASE_URL`), never as the application role.
+
+   These are asserted in `packages/db/test/rls.test.ts`, because "RLS enabled but not binding" is a silent failure that reads as correct in every migration and document.
+
 4. **Security tests.** Every permission ships with allow **and** deny tests; every module ships cross-tenant denial tests (actor from tenant A requests tenant B resource → denied and audited). CI-enforced.
 
 ## 4. Roles
