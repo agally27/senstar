@@ -23,12 +23,17 @@ Requires Node 22+, pnpm, PostgreSQL 16.
 
 ```bash
 pnpm install
-cp .env.example .env.local          # fill in values (see file comments)
+cp .env.example apps/web/.env.local  # NOT the repo root — Next reads env from the app dir
 createdb senstar_dev                 # plus a senstar_test for integration tests
-pnpm db:migrate                      # apply migrations (needs MIGRATION_DATABASE_URL)
+pnpm db:migrate                      # needs MIGRATION_DATABASE_URL in the shell — see below
 pnpm typecheck && pnpm lint && pnpm test
 pnpm --filter @senstar/web dev       # http://localhost:3000 (/api/health)
 ```
+
+Two env-loading rules that are easy to get wrong, because they differ:
+
+- **The web app** reads `apps/web/.env.local`. A `.env.local` at the repository root is silently ignored — Next resolves env files relative to the app, not the workspace. Env files are read at startup, so restart `dev` after editing one.
+- **`pnpm db:migrate`** loads no env file at all; it reads the process environment. Pass the variables on the command line, or `export` them first.
 
 Two database roles, not one (ADR-0009): `MIGRATION_DATABASE_URL` is the owner and runs migrations; `DATABASE_URL` is the non-owning `senstar_app` role the application connects as, created by migration `0004`. Set its password once per environment with `ALTER ROLE senstar_app WITH PASSWORD '...'` — migrations never carry credentials.
 
