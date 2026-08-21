@@ -44,4 +44,6 @@ Synthetic data only outside production — no real child data anywhere before th
 
 `apps/web/vercel.json` pins function execution to **`lhr1`** (London), as ADR-0003 decided. This is not cosmetic: Vercel's `regions` **defaults to `iad1`** (Washington DC), so an unpinned deployment would process data in the US and break D4 residency and non-negotiable principle 5.
 
+Hosted connection strings must use **`sslmode=verify-full`**, not `sslmode=require`. node-postgres treats `require` as `verify-full` today but warns that pg v9 adopts libpq semantics, where `require` stops verifying the server certificate — so a dependency bump would silently weaken the database connection. `.env.example` carries the full reasoning.
+
 `MIGRATION_DATABASE_URL` must **not** be set in Vercel. The application runs on `DATABASE_URL` alone (ADR-0009); migrations run from a trusted machine or CI against the owner role.
